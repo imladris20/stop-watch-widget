@@ -20,7 +20,7 @@ UI Rules:
 
 Reference Image:
 
-<img src="public/stop-watch-ui.png" alt="stop-watch-example" width="200"/>
+<img src="public/stop-watch-ui.jpeg" alt="stop-watch-example" width="200"/>
 
 Reference Video:
 
