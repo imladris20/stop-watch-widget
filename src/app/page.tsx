@@ -5,6 +5,7 @@ import { formatTime } from "../util/util";
 export default function StopWatchApp() {
   //* As dependency of useEffect to decide timing of recalculate elapsed time
   const [isWatching, setIsWatching] = useState(false);
+  const [haveStarted, setHaveStarted] = useState(false);
 
   //* unit will be millisecond
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -21,12 +22,14 @@ export default function StopWatchApp() {
     start: () => {
       console.log("it start");
       setIsWatching(true);
+      setHaveStarted(true);
       startTimeRef.current = Date.now() - elapsedTime;
     },
     reset: () => {
       console.log("it reset");
       setElapsedTime(0);
       setIsWatching(false);
+      setHaveStarted(false);
     },
     lap: () => {
       console.log("it lap");
@@ -55,30 +58,35 @@ export default function StopWatchApp() {
         {formatTime(elapsedTime)}
       </h2>
       <div className="flex w-72 justify-between">
-        <button className="h-32 w-32 rounded-full border-4 border-solid border-gray-200 bg-rosyBrown text-2xl text-white">
-          Lap
-        </button>
-
-        <button
-          onClick={watchAction.start}
-          className="h-32 w-32 rounded-full border-4 border-solid border-gray-200 bg-goldenRod text-2xl text-white"
-        >
-          Start
-        </button>
-      </div>
-      <div className="flex w-72 justify-between">
-        <button
-          onClick={watchAction.pause}
-          className="h-32 w-32 rounded-full border-4 border-solid border-gray-200 bg-red-300 text-2xl text-white"
-        >
-          pause
-        </button>
-        <button
-          onClick={watchAction.reset}
-          className="h-32 w-32 rounded-full border-4 border-solid border-gray-200 bg-gray-400 text-2xl text-white"
-        >
-          reset
-        </button>
+        {!isWatching && haveStarted ? (
+          <button
+            onClick={watchAction.reset}
+            className="h-32 w-32 rounded-full border-4 border-solid border-gray-200 bg-rosyBrown text-2xl font-medium text-white"
+          >
+            reset
+          </button>
+        ) : (
+          <button
+            className={`h-32 w-32 rounded-full border-4 border-solid border-gray-200 ${haveStarted ? "bg-rosyBrown text-white" : "bg-lightBrown text-black"} text-2xl font-medium`}
+          >
+            Lap
+          </button>
+        )}
+        {!isWatching ? (
+          <button
+            onClick={watchAction.start}
+            className="h-32 w-32 rounded-full border-4 border-solid border-gray-200 bg-goldenRod text-2xl font-medium text-white"
+          >
+            Start
+          </button>
+        ) : (
+          <button
+            onClick={watchAction.pause}
+            className="h-32 w-32 rounded-full border-4 border-solid border-gray-200 bg-maroon text-2xl font-medium text-white"
+          >
+            pause
+          </button>
+        )}
       </div>
       <div className="mt-6 grid w-80 grid-cols-2 gap-y-3">
         <h3 className="text-xl font-medium text-thistle">Lap 2:</h3>

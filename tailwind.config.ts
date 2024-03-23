@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         lightSalmon: "#F0BB9B",
         rosyBrown: "#9E8172",
+        lightBrown: "#D1C1B5",
         goldenRod: "#BF9848",
         maroon: "#8B4542",
         thistle: "#71606B",
