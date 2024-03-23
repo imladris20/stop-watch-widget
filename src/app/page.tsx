@@ -11,9 +11,7 @@ export default function StopWatchApp() {
   const [elapsedTime, setElapsedTime] = useState(0);
 
   //* To memorize id of interval
-  const intervalRef = useRef<NodeJS.Timeout | number | string | null | Timeout>(
-    null,
-  );
+  const intervalRef = useRef<NodeJS.Timeout | number>(0);
 
   //* unit will be millisecond
   const startTimeRef = useRef(0);
