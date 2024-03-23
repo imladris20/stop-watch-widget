@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { formatTime } from "../util/util";
 
 export default function StopWatchApp() {
@@ -8,7 +8,7 @@ export default function StopWatchApp() {
   const [haveStarted, setHaveStarted] = useState(false);
 
   //* unit will be millisecond
-  const [elapsedTime, setElapsedTime] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState([0, 0]);
 
   //* To memorize id of interval
   const intervalRef = useRef<NodeJS.Timeout | number>(0);
@@ -20,10 +20,10 @@ export default function StopWatchApp() {
     start: () => {
       setIsWatching(true);
       setHaveStarted(true);
-      startTimeRef.current = Date.now() - elapsedTime;
+      startTimeRef.current = Date.now() - elapsedTime[0];
     },
     reset: () => {
-      setElapsedTime(0);
+      setElapsedTime([0, 0]);
       setIsWatching(false);
       setHaveStarted(false);
     },
@@ -38,19 +38,22 @@ export default function StopWatchApp() {
   useEffect(() => {
     if (isWatching) {
       intervalRef.current = setInterval(() => {
-        setElapsedTime(Date.now() - startTimeRef.current);
+        const newElapsedTime = [...elapsedTime];
+        newElapsedTime[0] = Date.now() - startTimeRef.current;
+        newElapsedTime[1] = Date.now() - startTimeRef.current;
+        setElapsedTime(newElapsedTime);
       }, 20);
     }
 
     return () => {
       clearInterval(intervalRef.current);
     };
-  }, [isWatching]);
+  }, [isWatching, elapsedTime]);
 
   return (
     <main className="mx-auto flex w-96 flex-col items-center justify-center gap-6 pt-12">
       <h2 className="text-7xl font-medium text-lightSalmon">
-        {formatTime(elapsedTime)}
+        {formatTime(elapsedTime[0])}
       </h2>
       <div className="flex w-72 justify-between">
         {!isWatching && haveStarted ? (
@@ -84,14 +87,25 @@ export default function StopWatchApp() {
           </button>
         )}
       </div>
-      {/*       <div className="mt-6 grid w-80 grid-cols-2 gap-y-3">
-        <h3 className="text-xl font-medium text-thistle">Lap 2:</h3>
-        <h4 className="text-end text-xl font-medium text-thistle">
-          12:00:12.50
-        </h4>
-        <h3 className="text-xl font-medium text-thistle">Lap 1:</h3>
-        <h4 className="text-end text-xl font-medium text-thistle">00:07.87</h4>
-      </div> */}
+      {elapsedTime[1] !== 0 && (
+        <div className="mt-6 grid w-80 grid-cols-2 gap-y-3">
+          {elapsedTime.map((lap, index) => {
+            if (index === 0) {
+              return;
+            }
+            return (
+              <Fragment key={index}>
+                <h3 className="text-xl font-medium text-thistle">
+                  Lap {index}:
+                </h3>
+                <h4 className="text-end text-xl font-medium text-thistle">
+                  {formatTime(lap)}
+                </h4>
+              </Fragment>
+            );
+          })}
+        </div>
+      )}
     </main>
   );
 }
