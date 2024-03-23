@@ -12,9 +12,13 @@
 # next.js
 /.next/
 /out/
+next.config.js
 
 # production
 /build
+.firebaserc
+firebase.json
+.firebase
 
 # misc
 .DS_Store
