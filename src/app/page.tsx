@@ -62,7 +62,8 @@ export default function StopWatchApp() {
           </button>
         ) : (
           <button
-            className={`h-32 w-32 rounded-full border-4 border-solid border-gray-200 ${haveStarted ? "bg-rosyBrown text-white" : "bg-lightBrown text-black"} text-2xl font-medium`}
+            disabled
+            className={`h-32 w-32 rounded-full border-4 border-solid border-gray-200 ${haveStarted ? "bg-rosyBrown text-white" : "bg-lightBrown text-gray-600"} text-2xl font-medium`}
           >
             Lap
           </button>
@@ -83,14 +84,14 @@ export default function StopWatchApp() {
           </button>
         )}
       </div>
-      <div className="mt-6 grid w-80 grid-cols-2 gap-y-3">
+      {/*       <div className="mt-6 grid w-80 grid-cols-2 gap-y-3">
         <h3 className="text-xl font-medium text-thistle">Lap 2:</h3>
         <h4 className="text-end text-xl font-medium text-thistle">
           12:00:12.50
         </h4>
         <h3 className="text-xl font-medium text-thistle">Lap 1:</h3>
         <h4 className="text-end text-xl font-medium text-thistle">00:07.87</h4>
-      </div>
+      </div> */}
     </main>
   );
 }
