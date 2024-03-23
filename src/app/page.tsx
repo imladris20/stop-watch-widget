@@ -2,10 +2,14 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { formatTime } from "../util/util";
 
+const buttonBasicStyle =
+  "h-32 w-32 rounded-full border-4 border-solid border-gray-200 text-2xl font-medium";
+
 export default function StopWatchApp() {
   //* As dependency of useEffect to decide timing of recalculate elapsed time
   const [isWatching, setIsWatching] = useState(false);
   const [haveStarted, setHaveStarted] = useState(false);
+  const [currentLap, setCurrentLap] = useState(0);
 
   //* unit will be millisecond
   const [elapsedTime, setElapsedTime] = useState([0, 0]);
@@ -14,21 +18,25 @@ export default function StopWatchApp() {
   const intervalRef = useRef<NodeJS.Timeout | number>(0);
 
   //* unit will be millisecond
-  const startTimeRef = useRef(0);
+  const startTimeRef = useRef([0, 0]);
 
   const watchAction = {
     start: () => {
       setIsWatching(true);
       setHaveStarted(true);
-      startTimeRef.current = Date.now() - elapsedTime[0];
+      setCurrentLap(1);
+      startTimeRef.current[0] = Date.now() - elapsedTime[0];
+      startTimeRef.current[1] = Date.now() - elapsedTime[1];
     },
     reset: () => {
       setElapsedTime([0, 0]);
+      setCurrentLap(0);
       setIsWatching(false);
       setHaveStarted(false);
     },
     lap: () => {
       console.log("it lap");
+      setCurrentLap((prev) => prev + 1);
     },
     pause: () => {
       setIsWatching(false);
@@ -39,8 +47,8 @@ export default function StopWatchApp() {
     if (isWatching) {
       intervalRef.current = setInterval(() => {
         const newElapsedTime = [...elapsedTime];
-        newElapsedTime[0] = Date.now() - startTimeRef.current;
-        newElapsedTime[1] = Date.now() - startTimeRef.current;
+        newElapsedTime[0] = Date.now() - startTimeRef.current[0];
+        newElapsedTime[1] = Date.now() - startTimeRef.current[1];
         setElapsedTime(newElapsedTime);
       }, 20);
     }
@@ -59,14 +67,14 @@ export default function StopWatchApp() {
         {!isWatching && haveStarted ? (
           <button
             onClick={watchAction.reset}
-            className="h-32 w-32 rounded-full border-4 border-solid border-gray-200 bg-rosyBrown text-2xl font-medium text-white"
+            className={`${buttonBasicStyle} bg-rosyBrown text-white`}
           >
             reset
           </button>
         ) : (
           <button
-            disabled
-            className={`h-32 w-32 rounded-full border-4 border-solid border-gray-200 ${haveStarted ? "bg-rosyBrown text-white" : "bg-lightBrown text-gray-600"} text-2xl font-medium`}
+            disabled={!haveStarted}
+            className={`${buttonBasicStyle} ${haveStarted ? "bg-rosyBrown text-white" : "bg-lightBrown text-gray-600"}`}
           >
             Lap
           </button>
@@ -74,14 +82,14 @@ export default function StopWatchApp() {
         {!isWatching ? (
           <button
             onClick={watchAction.start}
-            className="h-32 w-32 rounded-full border-4 border-solid border-gray-200 bg-goldenRod text-2xl font-medium text-white"
+            className={`${buttonBasicStyle} bg-goldenRod text-white`}
           >
             Start
           </button>
         ) : (
           <button
             onClick={watchAction.pause}
-            className="h-32 w-32 rounded-full border-4 border-solid border-gray-200 bg-maroon text-2xl font-medium text-white"
+            className={`${buttonBasicStyle} bg-maroon text-white`}
           >
             pause
           </button>
