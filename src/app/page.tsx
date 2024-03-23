@@ -18,13 +18,11 @@ export default function StopWatchApp() {
 
   const watchAction = {
     start: () => {
-      console.log("it start");
       setIsWatching(true);
       setHaveStarted(true);
       startTimeRef.current = Date.now() - elapsedTime;
     },
     reset: () => {
-      console.log("it reset");
       setElapsedTime(0);
       setIsWatching(false);
       setHaveStarted(false);
@@ -33,7 +31,6 @@ export default function StopWatchApp() {
       console.log("it lap");
     },
     pause: () => {
-      console.log("it pause");
       setIsWatching(false);
     },
   };
