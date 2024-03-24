@@ -1,5 +1,6 @@
 "use client";
 import { WatchAction } from "@/types/watch";
+import { parseTotalTime } from "@/util/util";
 import { useEffect, useRef, useState } from "react";
 import ButtonPanel from "./ButtonPanel";
 import Laps from "./Laps";
@@ -69,12 +70,7 @@ export default function StopWatchApp() {
 
   return (
     <main className="mx-auto flex w-96 flex-col items-center justify-center gap-6 pt-12">
-      <Maintime
-        display={elapsedTimes.reduce(
-          (accumulator, currentValue) => accumulator + currentValue,
-          0,
-        )}
-      />
+      <Maintime totalTime={parseTotalTime(elapsedTimes)} />
       <ButtonPanel
         isWatching={isWatching}
         haveStarted={haveStarted}
