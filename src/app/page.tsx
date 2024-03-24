@@ -9,7 +9,6 @@ export default function StopWatchApp() {
   const [isWatching, setIsWatching] = useState(false);
   const [haveStarted, setHaveStarted] = useState(false);
   const [currentLap, setCurrentLap] = useState(1);
-  const [startTimes, setStartTimes] = useState([0, 0]);
   const [elapsedTimes, setElapsedTimes] = useState([0, 0]);
   const startTimesRef = useRef<number[]>([0, 0]);
   const intervalRef = useRef<NodeJS.Timeout | number | null>(null);
@@ -18,16 +17,13 @@ export default function StopWatchApp() {
     start: () => {
       setIsWatching(true);
       setHaveStarted(true);
-      // const newStartTimes = [...startTimes];
       const newStartTimes = [...startTimesRef.current];
       newStartTimes[0] = Date.now() - elapsedTimes[0];
       newStartTimes[currentLap] = Date.now() - elapsedTimes[currentLap];
-      // setStartTimes(newStartTimes);
       startTimesRef.current = newStartTimes;
     },
     reset: () => {
       setElapsedTimes([0, 0]);
-      // setStartTimes([0, 0]);
       startTimesRef.current = [0, 0];
       setCurrentLap(1);
       setIsWatching(false);
@@ -37,12 +33,10 @@ export default function StopWatchApp() {
       }
     },
     lap: () => {
-      // const newStartTimes = [...startTimes, Date.now()];
       const newStartTimes = [...startTimesRef.current, Date.now()];
       const newElapsedTimes = [...elapsedTimes, 0];
       setCurrentLap((prev) => prev + 1);
       setElapsedTimes(newElapsedTimes);
-      // setStartTimes(newStartTimes);
       startTimesRef.current = newStartTimes;
     },
     stop: () => {
@@ -61,12 +55,6 @@ export default function StopWatchApp() {
         Date.now() - startTimesRef.current[currentLap];
       return newElapsedTimes;
     };
-    /*     const updateElapsedTimes = (elapsedTimes: number[]) => {
-      const newElapsedTimes = [...elapsedTimes];
-      newElapsedTimes[0] = Date.now() - startTimes[0];
-      newElapsedTimes[currentLap] = Date.now() - startTimes[currentLap];
-      return newElapsedTimes;
-    }; */
 
     if (isWatching) {
       intervalRef.current = setInterval(() => {

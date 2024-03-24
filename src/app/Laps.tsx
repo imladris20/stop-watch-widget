@@ -1,12 +1,8 @@
 import { Fragment } from "react";
 import { formatTime } from "../util/util";
 
-interface lapsProps {
-  elapsedTimes: number[];
-}
-
-const Laps = (props: lapsProps) => {
-  const lapsWithCorrectOrder = props.elapsedTimes.toReversed().slice(0, -1);
+const Laps = ({ elapsedTimes }: { elapsedTimes: number[] }) => {
+  const lapsWithCorrectOrder = elapsedTimes.toReversed().slice(0, -1);
 
   return (
     <div className="mt-6 grid w-80 grid-cols-2 gap-y-3">

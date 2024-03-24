@@ -18,3 +18,9 @@ export interface ButtonVariants {
   start: string;
   stop: string;
 }
+
+export interface ButtonProps {
+  action: () => void;
+  variant: string;
+  content: string;
+}

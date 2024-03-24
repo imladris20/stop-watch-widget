@@ -9,9 +9,7 @@ const variants: ButtonVariants = {
   stop: "bg-maroon text-white",
 };
 
-const ButtonPanel = (props: PanelProps) => {
-  const { watchAction, haveStarted, isWatching } = props;
-
+const ButtonPanel = ({ watchAction, haveStarted, isWatching }: PanelProps) => {
   const showReset: boolean = !isWatching && haveStarted;
 
   return (

@@ -1,12 +1,6 @@
-interface buttonProps {
-  action: () => void;
-  variant: string;
-  content: string;
-}
+import { ButtonProps } from "@/types/watch";
 
-const WatchButton = (props: buttonProps) => {
-  const { action, variant, content } = props;
-
+const WatchButton = ({ action, variant, content }: ButtonProps) => {
   const shouldDisabled = variant === "bg-lightBrown text-gray-600";
 
   return (
