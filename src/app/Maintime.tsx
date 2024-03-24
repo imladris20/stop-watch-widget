@@ -1,6 +1,6 @@
 import { formatTime } from "../util/util";
 
-const Maintime = ({ totalTime }: { totalTime: number }) => {
+const Maintime = ({ elapsedSum: totalTime }: { elapsedSum: number }) => {
   return (
     <h2 className="text-7xl font-medium text-lightSalmon">
       {formatTime(totalTime)}

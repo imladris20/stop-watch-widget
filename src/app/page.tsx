@@ -70,7 +70,7 @@ export default function StopWatchApp() {
 
   return (
     <main className="mx-auto flex w-96 flex-col items-center justify-center gap-6 pt-12">
-      <Maintime totalTime={parseTotalTime(elapsedTimes)} />
+      <Maintime elapsedSum={parseTotalTime(elapsedTimes)} />
       <ButtonPanel
         isWatching={isWatching}
         haveStarted={haveStarted}
