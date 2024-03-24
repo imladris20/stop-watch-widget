@@ -21,3 +21,16 @@ export const formatTime = (elapsedTime: number) => {
   }
   return `${hours}:${minutes}:${seconds}.${milliseconds}`;
 };
+
+export const parseTotalTime = (timeArray: number[]) => {
+  const parsedTimeArray = timeArray.map((time) => {
+    return Math.floor(time / 10) * 10;
+  });
+
+  const totalTimes = parsedTimeArray.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0,
+  );
+
+  return totalTimes;
+};
