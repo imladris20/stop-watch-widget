@@ -1,5 +1,12 @@
-import WatchButton from "@/components/WatchButton";
-import { variants } from "@/util/util";
+import WatchButton from "../components/WatchButton";
+
+const variants = {
+  reset: "bg-rosyBrown text-white",
+  activeLap: "bg-rosyBrown text-white",
+  disabledLap: "bg-lightBrown text-gray-600",
+  start: "bg-goldenRod text-white",
+  stop: "bg-maroon text-white",
+};
 
 interface watchAction {
   start: () => void;
