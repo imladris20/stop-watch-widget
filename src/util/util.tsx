@@ -22,3 +22,11 @@ export const formatTime = (millisecondsHavePassed: number) => {
 
   return `${hours}:${minutes}:${seconds}.${milliseconds}`;
 };
+
+export const variants = {
+  reset: "bg-rosyBrown text-white",
+  activeLap: "bg-rosyBrown text-white",
+  disabledLap: "bg-lightBrown text-gray-600",
+  start: "bg-goldenRod text-white",
+  stop: "bg-maroon text-white",
+};
