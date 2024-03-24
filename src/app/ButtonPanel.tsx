@@ -1,6 +1,7 @@
+import { ButtonVariants, PanelProps } from "@/types/watch";
 import WatchButton from "../components/WatchButton";
 
-const variants = {
+const variants: ButtonVariants = {
   reset: "bg-rosyBrown text-white",
   activeLap: "bg-rosyBrown text-white",
   disabledLap: "bg-lightBrown text-gray-600",
@@ -8,23 +9,10 @@ const variants = {
   stop: "bg-maroon text-white",
 };
 
-interface watchAction {
-  start: () => void;
-  reset: () => void;
-  lap: () => void;
-  stop: () => void;
-}
-
-interface panelProps {
-  isWatching: boolean;
-  haveStarted: boolean;
-  watchAction: watchAction;
-}
-
-const ButtonPanel = (props: panelProps) => {
+const ButtonPanel = (props: PanelProps) => {
   const { watchAction, haveStarted, isWatching } = props;
 
-  const showReset = !isWatching && haveStarted;
+  const showReset: boolean = !isWatching && haveStarted;
 
   return (
     <div className="flex w-72 justify-between">

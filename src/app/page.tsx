@@ -1,4 +1,5 @@
 "use client";
+import { WatchAction } from "@/types/watch";
 import { useEffect, useRef, useState } from "react";
 import ButtonPanel from "./ButtonPanel";
 import Laps from "./Laps";
@@ -10,9 +11,9 @@ export default function StopWatchApp() {
   const [currentLap, setCurrentLap] = useState(1);
   const [startTimes, setStartTimes] = useState([0, 0]);
   const [elapsedTimes, setElapsedTimes] = useState([0, 0]);
-  const intervalRef = useRef<NodeJS.Timeout | number>(0);
+  const intervalRef = useRef<NodeJS.Timeout | number | null>(null);
 
-  const watchAction = {
+  const watchAction: WatchAction = {
     start: () => {
       setIsWatching(true);
       setHaveStarted(true);
@@ -27,7 +28,9 @@ export default function StopWatchApp() {
       setCurrentLap(1);
       setIsWatching(false);
       setHaveStarted(false);
-      clearInterval(intervalRef.current);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     },
     lap: () => {
       const newStartTimes = [...startTimes, Date.now()];
@@ -38,24 +41,32 @@ export default function StopWatchApp() {
     },
     stop: () => {
       setIsWatching(false);
-      clearInterval(intervalRef.current);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     },
   };
 
   useEffect(() => {
+    const updateElapsedTimes = (elapsedTimes: number[]) => {
+      const newElapsedTimes = [...elapsedTimes];
+      newElapsedTimes[0] = Date.now() - startTimes[0];
+      newElapsedTimes[currentLap] = Date.now() - startTimes[currentLap];
+      return newElapsedTimes;
+    };
+
     if (isWatching) {
       intervalRef.current = setInterval(() => {
-        const newElapsedTimes = [...elapsedTimes];
-        newElapsedTimes[0] = Date.now() - startTimes[0];
-        newElapsedTimes[currentLap] = Date.now() - startTimes[currentLap];
-        setElapsedTimes(newElapsedTimes);
+        setElapsedTimes((prev) => updateElapsedTimes(prev));
       }, 10);
     }
 
     return () => {
-      clearInterval(intervalRef.current);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     };
-  }, [isWatching, elapsedTimes, currentLap, startTimes]);
+  }, [isWatching, currentLap, startTimes]);
 
   return (
     <main className="mx-auto flex w-96 flex-col items-center justify-center gap-6 pt-12">
