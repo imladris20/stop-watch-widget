@@ -8,9 +8,9 @@ import Maintime from "./Maintime";
 export default function StopWatchApp() {
   const [isWatching, setIsWatching] = useState(false);
   const [haveStarted, setHaveStarted] = useState(false);
-  const [currentLap, setCurrentLap] = useState(1);
-  const [elapsedTimes, setElapsedTimes] = useState([0, 0]);
-  const startTimesRef = useRef<number[]>([0, 0]);
+  const [currentLap, setCurrentLap] = useState(0);
+  const [elapsedTimes, setElapsedTimes] = useState([0]);
+  const startTimesRef = useRef<number[]>([0]);
   const intervalRef = useRef<NodeJS.Timeout | number | null>(null);
 
   const watchAction: WatchAction = {
@@ -18,14 +18,13 @@ export default function StopWatchApp() {
       setIsWatching(true);
       setHaveStarted(true);
       const newStartTimes = [...startTimesRef.current];
-      newStartTimes[0] = Date.now() - elapsedTimes[0];
       newStartTimes[currentLap] = Date.now() - elapsedTimes[currentLap];
       startTimesRef.current = newStartTimes;
     },
     reset: () => {
-      setElapsedTimes([0, 0]);
-      startTimesRef.current = [0, 0];
-      setCurrentLap(1);
+      setElapsedTimes([0]);
+      startTimesRef.current = [0];
+      setCurrentLap(0);
       setIsWatching(false);
       setHaveStarted(false);
       if (intervalRef.current) {
@@ -50,7 +49,6 @@ export default function StopWatchApp() {
   useEffect(() => {
     const updateElapsedTimes = (elapsedTimes: number[]) => {
       const newElapsedTimes = [...elapsedTimes];
-      newElapsedTimes[0] = Date.now() - startTimesRef.current[0];
       newElapsedTimes[currentLap] =
         Date.now() - startTimesRef.current[currentLap];
       return newElapsedTimes;
@@ -71,7 +69,12 @@ export default function StopWatchApp() {
 
   return (
     <main className="mx-auto flex w-96 flex-col items-center justify-center gap-6 pt-12">
-      <Maintime display={elapsedTimes[0]} />
+      <Maintime
+        display={elapsedTimes.reduce(
+          (accumulator, currentValue) => accumulator + currentValue,
+          0,
+        )}
+      />
       <ButtonPanel
         isWatching={isWatching}
         haveStarted={haveStarted}
