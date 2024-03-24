@@ -11,20 +11,24 @@ export default function StopWatchApp() {
   const [currentLap, setCurrentLap] = useState(1);
   const [startTimes, setStartTimes] = useState([0, 0]);
   const [elapsedTimes, setElapsedTimes] = useState([0, 0]);
+  const startTimesRef = useRef<number[]>([0, 0]);
   const intervalRef = useRef<NodeJS.Timeout | number | null>(null);
 
   const watchAction: WatchAction = {
     start: () => {
       setIsWatching(true);
       setHaveStarted(true);
-      const newStartTimes = [...startTimes];
+      // const newStartTimes = [...startTimes];
+      const newStartTimes = [...startTimesRef.current];
       newStartTimes[0] = Date.now() - elapsedTimes[0];
       newStartTimes[currentLap] = Date.now() - elapsedTimes[currentLap];
-      setStartTimes(newStartTimes);
+      // setStartTimes(newStartTimes);
+      startTimesRef.current = newStartTimes;
     },
     reset: () => {
       setElapsedTimes([0, 0]);
-      setStartTimes([0, 0]);
+      // setStartTimes([0, 0]);
+      startTimesRef.current = [0, 0];
       setCurrentLap(1);
       setIsWatching(false);
       setHaveStarted(false);
@@ -33,11 +37,13 @@ export default function StopWatchApp() {
       }
     },
     lap: () => {
-      const newStartTimes = [...startTimes, Date.now()];
+      // const newStartTimes = [...startTimes, Date.now()];
+      const newStartTimes = [...startTimesRef.current, Date.now()];
       const newElapsedTimes = [...elapsedTimes, 0];
       setCurrentLap((prev) => prev + 1);
       setElapsedTimes(newElapsedTimes);
-      setStartTimes(newStartTimes);
+      // setStartTimes(newStartTimes);
+      startTimesRef.current = newStartTimes;
     },
     stop: () => {
       setIsWatching(false);
@@ -50,10 +56,17 @@ export default function StopWatchApp() {
   useEffect(() => {
     const updateElapsedTimes = (elapsedTimes: number[]) => {
       const newElapsedTimes = [...elapsedTimes];
+      newElapsedTimes[0] = Date.now() - startTimesRef.current[0];
+      newElapsedTimes[currentLap] =
+        Date.now() - startTimesRef.current[currentLap];
+      return newElapsedTimes;
+    };
+    /*     const updateElapsedTimes = (elapsedTimes: number[]) => {
+      const newElapsedTimes = [...elapsedTimes];
       newElapsedTimes[0] = Date.now() - startTimes[0];
       newElapsedTimes[currentLap] = Date.now() - startTimes[currentLap];
       return newElapsedTimes;
-    };
+    }; */
 
     if (isWatching) {
       intervalRef.current = setInterval(() => {
@@ -66,7 +79,7 @@ export default function StopWatchApp() {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isWatching, currentLap, startTimes]);
+  }, [isWatching, currentLap]);
 
   return (
     <main className="mx-auto flex w-96 flex-col items-center justify-center gap-6 pt-12">
